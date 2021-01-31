@@ -384,14 +384,14 @@ bool Camera::setProperty(int property_id, double value) {
 
 - (id)init {
     [super init];
-    newFrame = 0;
-    image = NULL;
+    newFrameK = 0;
+    imageK = NULL;
     return self;
 }
 
 
 -(void)dealloc {
-    delete image;
+    delete imageK;
     [super dealloc];
 }
 
@@ -405,12 +405,12 @@ fromConnection:(AVCaptureConnection *)connection{
     CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
 
     CVBufferRetain(imageBuffer);
-    CVImageBufferRef imageBufferToRelease  = mCurrentImageBuffer;
+    CVImageBufferRef imageBufferToRelease  = mCurrentImageBufferK;
 
     @synchronized (self) {
 
-        mCurrentImageBuffer = imageBuffer;
-        newFrame = 1;
+        mCurrentImageBufferK = imageBuffer;
+        newFrameK = 1;
     }
 
     CVBufferRelease(imageBufferToRelease);
@@ -419,18 +419,18 @@ fromConnection:(AVCaptureConnection *)connection{
 
 
 -(CameraFrame*) getOutput {
-    return image;
+    return imageK;
 }
 
 -(int) updateImage {
     CVPixelBufferRef pixels;
 
-    if (newFrame == 0)
+    if (newFrameK == 0)
         return 0;
 
     @synchronized (self) {
-        pixels = CVBufferRetain(mCurrentImageBuffer);
-        newFrame = 0;
+        pixels = CVBufferRetain(mCurrentImageBufferK);
+        newFrameK = 0;
     }
 
     CVPixelBufferLockBaseAddress(pixels, 0);
@@ -445,21 +445,21 @@ fromConnection:(AVCaptureConnection *)connection{
 
     if (rowsize != 0) {
 
-        if (image == NULL)
-            image = new CameraFrame((int)width, (int)height);
+        if (imageK == NULL)
+            imageK = new CameraFrame((int)width, (int)height);
 
-        if (image->datasize != width * height * sizeof(char) * 4) {
-            image->datasize = (unsigned int)(width * height * sizeof(char) * 4);
-            if (image->data != NULL)
-                free(image->data);
-            image->data = (char *)malloc(image->datasize);
-            image->rowsize = (unsigned int)rowsize;
+        if (imageK->datasize != width * height * sizeof(char) * 4) {
+            imageK->datasize = (unsigned int)(width * height * sizeof(char) * 4);
+            if (imageK->data != NULL)
+                free(imageK->data);
+            imageK->data = (char *)malloc(imageK->datasize);
+            imageK->rowsize = (unsigned int)rowsize;
         }
 
-        if (image->rowsize == width * 4)
-            memcpy(image->data, baseaddress, image->datasize);
+        if (imageK->rowsize == width * 4)
+            memcpy(imageK->data, baseaddress, imageK->datasize);
         else {
-            char *dstbuffer = image->data;
+            char *dstbuffer = imageK->data;
             char *srcbuffer = (char *)baseaddress;
             unsigned long width4 = width * 4;
             for (int y = 0; y < height; y++) {
