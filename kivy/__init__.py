@@ -222,7 +222,7 @@ kivy_options = {
         'gstplayer', 'pygame', 'ffpyplayer', 'sdl2',
         'avplayer'),
     'image': ('tex', 'imageio', 'dds', 'sdl2', 'pygame', 'pil', 'ffpy', 'gif'),
-    'camera': ('opencv', 'gi', 'avfoundation',
+    'camera': ('opencv',
                'android', 'picamera'),
     'spelling': ('enchant', 'osxappkit', ),
     'clipboard': (

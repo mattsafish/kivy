@@ -118,8 +118,6 @@ report = []
 title('Core selection')
 from kivy.core.audio import SoundLoader
 report.append('Audio  = %s' % SoundLoader._classes)
-from kivy.core.camera import Camera
-report.append('Camera = %s' % Camera)
 from kivy.core.image import ImageLoader
 report.append('Image  = %s' % ImageLoader.loaders)
 from kivy.core.text import Label

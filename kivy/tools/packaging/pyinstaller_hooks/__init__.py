@@ -190,7 +190,7 @@ def get_deps_minimal(exclude_ignored=True, **kwargs):
                          cipher=block_cipher,
                          **get_deps_minimal(video=None, audio=None))
     '''
-    core_mods = ['audio', 'camera', 'clipboard', 'image', 'spelling', 'text',
+    core_mods = ['audio', 'clipboard', 'image', 'spelling', 'text',
                  'video', 'window']
     mods = kivy_modules[:]
     excludes = excludedimports[:]
